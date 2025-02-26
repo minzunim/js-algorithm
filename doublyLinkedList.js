@@ -55,12 +55,31 @@ class DoublyLinkedList {
 
         return prevTail;
     }
+
+    // 맨 앞의 노드 제거
+    shift() {
+        if (!this.length) return undefined;
+        else {
+            let prevHead = this.head;
+            if (this.length === 1) {
+                this.head = null;
+                this.tail = null;
+            } else {
+                this.head.next = this.head;
+            }
+            this.length--;
+
+            return prevHead;
+        }
+    }
+
 }
 
 const dl = new DoublyLinkedList();
 
 dl.push(1);
-// dl.push(2);
-const tail = dl.pop();
+dl.push(2);
+dl.push(3);
 
-console.log(tail);
+
+console.log(dl.shift());
