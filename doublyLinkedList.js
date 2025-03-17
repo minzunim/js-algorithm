@@ -58,19 +58,73 @@ class DoublyLinkedList {
 
     // 맨 앞의 노드 제거
     shift() {
+        // 현재 노드가 하나도 없을 때
         if (!this.length) return undefined;
-        else {
-            let prevHead = this.head;
-            if (this.length === 1) {
-                this.head = null;
-                this.tail = null;
-            } else {
-                this.head.next = this.head;
-            }
-            this.length--;
+        var oldHead = this.head;
 
-            return prevHead;
+        // 노드가 한 개일 때
+        if (this.length === 1) {
+            this.head = null;
+            this.tail = null;
+        } else {
+            this.head = oldHead.next;
+            this.head.prev = null;
+            oldHead.next = null;
         }
+        // 그보다 많을 때
+        this.length--;
+        return oldHead;
+    }
+
+    unshift(val) {
+        // 새로운 노드 생성
+        var newNode = new Node(val);
+        if (!this.length) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.head.prev = newNode; // 현재 헤드의 이전값을 새로운 노드로 변경
+            newNode.next = this.head; // 새로운 노드의 다음 값을 이전 노드로 변경
+            this.head = newNode; // 현재 헤드를 새로운 노드로 변경
+        }
+
+        this.length++;
+        return this;
+    }
+
+    get(index) {
+        // 인덱스가 유효한지 확인
+        if (index < 0 || index >= this.length) return null;
+        let count, current = 0;
+        if (index < this.length / 2) {
+            // 헤드부터 시작
+            count = 0;
+            current = this.head;
+
+            while (count != index) {
+                current = current.next;
+                count++;
+            }
+        } else {
+            count = this.length - 1;
+            current = this.tail;
+
+            while (count != index) {
+                current = current.prev;
+                count--;
+            }
+        }
+        return current;
+    }
+
+    // 특정 인덱스의 값을 get 메소드로 찾은 다음 특정 값으로 변경
+    set(index, val) {
+        let node = this.get(index);
+        if (node) {
+            node.val = val;
+            return true;
+        }
+        return false;
     }
 
 }
@@ -81,5 +135,6 @@ dl.push(1);
 dl.push(2);
 dl.push(3);
 
+console.log(dl.unshift(4));
 
-console.log(dl.shift());
+//console.log(dl);
