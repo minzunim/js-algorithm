@@ -127,6 +127,61 @@ class DoublyLinkedList {
         return false;
     }
 
+    // 특정 인덱스에 값을 추가
+    insert(index, val) {
+        // 리스트 길이에 벗어나면 undefined
+        if (index < 0 || index > this.length) return undefined;
+        // index === 0 이면 unshift (헤드 추가)
+        if (index === 0) {
+            return !!this.unshift(val);
+
+            // index === this.length 이면 push (tail 추가)
+        } else if (index === this.length) {
+            return !!this.push(val);
+
+            // 그 외의 값이면 index -1 위치에 추가
+        } else {
+            let newNode = new Node(val);
+            let current = this.get(index);
+            let prevCurrent = this.get(index - 1);
+
+            // 1 - [prevCurrent] - [current] - ...
+            // prevCurrent 뒤에 먼저 연결 후 current 와 연결
+            prevCurrent.next = newNode; // 삽입하려는 위치 이전 노드의 다음 값을 현재 노드로 변경
+            newNode.prev = prevCurrent; // 현재 노드의 이전 값을 이전 노드로 변경
+            newNode.next = current;
+            current.prev = newNode;
+            this.length++;
+        }
+        return this;
+    }
+
+    remove(index) {
+        // index 유효성 확인
+        if (index < 0 || index >= this.length) return false;
+
+        // index === 0일 때 shift
+        if (index === 0) return this.shift();
+
+        // index === length - 1 pop
+        if (index === this.length - 1) return this.pop();
+
+        // 나머지 케이스
+        let currentNode = this.get(index);
+        let prevNode = currentNode.prev;
+        let nextNode = currentNode.next;
+
+        prevNode.next = nextNode;
+        nextNode.prev = prevNode;
+
+        // currentNode 연결 끊기
+        currentNode.prev = null;
+        currentNode.next = null;
+
+        this.length--;
+        return currentNode;
+    }
+
 }
 
 const dl = new DoublyLinkedList();
@@ -135,6 +190,6 @@ dl.push(1);
 dl.push(2);
 dl.push(3);
 
-console.log(dl.unshift(4));
+console.log(dl.remove(1));
 
 //console.log(dl);
