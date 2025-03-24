@@ -65,4 +65,40 @@ class BinarySearchTree {
         }
         return current;
     }
+
+    // 너비 우선 탐색 (트리의 모든 노드를 순회)
+    BSF() {
+        var data = [],
+            queue = [],
+            node = this.root;
+
+        // 큐에 root를 넣어준다
+        queue.push(node);
+
+        while (queue.length) {
+            // 큐 맨 앞에서 제거
+            node = queue.shift();
+            // 제거한 노드를 data에 담음
+            data.push(node);
+            if (node.left) queue.push(node.left);
+            if (node.right) queue.push(node.right);
+        }
+        return data;
+    }
 }
+
+const tree = new BinarySearchTree();
+
+tree.insert(3);
+tree.insert(4);
+tree.insert(5);
+
+console.log(tree.find(3));
+
+// * 자식은 부모를 기억하지 않음. 오직 부모가 자식을 left나 right로 저장함.
+// 3
+//  \
+//   4
+//    \
+//     5
+// 위 경우 3의 right는 4지만, 4의 left는 3이 아님. 4의 right는 5지만, 5의 left는 4가 아님.
